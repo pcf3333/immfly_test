@@ -30,8 +30,7 @@ Note: Take into account that any channel’s groups set should be included in it
 You can use any libraries, DBMS or tools you need to accomplish the task. We encourage you to define a readme file with some explanations about your solution. 
 
 
-# MY CODE:
-# Initial requirements:
+# MY CODE, Initial requirements:
 - Created two models, Content and Channel, in the models.py file, with the required variables.
 - Used a ManyToManyField in the Content model since it can have many files, and a ForeignKey field in the Channel model to relate objects. Added a related_name to the ForeignKey field to access all child instances through the subchannels attribute.
 - Implemented a cache in the Channel model to optimize the performance of the calculate_rating function. When a change is made in content related to a channel, all parent channels are cleared from the cache, and recalculated if needed. The same happens if content is deleted or any channel relations are modified. The code triggered that clears the cache is in the signals.py file.
