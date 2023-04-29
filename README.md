@@ -1,4 +1,4 @@
-# immfly_test
+# immfly_test headline
 
 Immfly Backend Test 
 
@@ -31,13 +31,9 @@ You can use any libraries, DBMS or tools you need to accomplish the task. We enc
 
 
 # Initial requirements:
-I created 2 models, Content and Channel models. They are both in the "models.py" file and contain the required variables. 
-The model Content can have many files, so I used a ManyToManyField. 
-The model Channel can have a parent so I used a ForeignKey field to relate the objects. I added a related_name to that field so that by accessing the "subchannels" retuns all the child instances.
-I also implemented a cache in the Channel model so that the rating of a channel only needs to be calcualted once (if the subchannels or content do not change). This intends to omptimize the performance of the "calculate_rating" function inside the Channel Model. When a change is made in a content related to a channel, all the parent channels are cleared from the cache so will have to be recalculated in the future if needed. The channels that are not affected are not cleared from the cache. The same happens if content is deleted or any channel relations are modified. The code triggered that clears the cache is in the "signals.py" file.
-
-The management command "calculate_channel_ratings" can be run by doing "python manage.py calculate_channel_ratings. It will calculate all the ratings for all the channels and export them into a csv file. The file will be saved in the project root directory /media_app. 
-
-I also created the endpoints to meet the needed requirements in the views.py file.
-
-I added several unit tests to check that the algorihtm for computing the channel ratings was working properly. I also tested that the cached data worked as expected in order to optimize the app's performance.
+- Created two models, Content and Channel, in the models.py file, with the required variables.
+- Used a ManyToManyField in the Content model since it can have many files, and a ForeignKey field in the Channel model to relate objects. Added a related_name to the ForeignKey field to access all child instances through the subchannels attribute.
+- Implemented a cache in the Channel model to optimize the performance of the calculate_rating function. When a change is made in content related to a channel, all parent channels are cleared from the cache, and recalculated if needed. The same happens if content is deleted or any channel relations are modified. The code triggered that clears the cache is in the signals.py file.
+- Created a management command, calculate_channel_ratings, to calculate all channel ratings and export them to a CSV file in the project root directory /media_app. Run with python manage.py calculate_channel_ratings.
+- Created endpoints in the views.py file to meet the required API specifications.
+- Added several unit tests to ensure that the algorithm for computing channel ratings was working properly and that the cached data optimized the app's performance.
