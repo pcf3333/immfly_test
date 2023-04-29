@@ -21,7 +21,7 @@ The requirements we ask for this test are:
 
 Get bonus points for: 
 ● Adding Groups to the channels. Considering that each channel can belong to multiple groups. 
-○ Allow filtering by group on Channels API. 
+● Allow filtering by group on Channels API. 
 Note: Take into account that any channel’s groups set should be included in its parent’s group set 
 ● High test coverage through unit tests 
 ● Usage of docker to run the services 
@@ -30,6 +30,7 @@ Note: Take into account that any channel’s groups set should be included in it
 You can use any libraries, DBMS or tools you need to accomplish the task. We encourage you to define a readme file with some explanations about your solution. 
 
 
+# MY CODE:
 # Initial requirements:
 - Created two models, Content and Channel, in the models.py file, with the required variables.
 - Used a ManyToManyField in the Content model since it can have many files, and a ForeignKey field in the Channel model to relate objects. Added a related_name to the ForeignKey field to access all child instances through the subchannels attribute.
