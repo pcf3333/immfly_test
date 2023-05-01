@@ -3,6 +3,11 @@ from django.core.exceptions import ValidationError
 from django.db.models import Avg
 
 
+class Group(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+    channels = models.ManyToManyField("Channel", related_name='group_channels')
+
 class File(models.Model):
     file = models.FileField(upload_to='content_files/')
 
@@ -18,6 +23,7 @@ class Channel(models.Model):
     picture = models.ImageField(upload_to='channel_pictures/')
     contents = models.ManyToManyField(Content, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subchannels')
+    groups = models.ManyToManyField(Group, related_name='channel_groups')
 
     # Cache for saving channel ratings
     _ratings_cache = {}

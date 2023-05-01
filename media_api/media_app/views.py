@@ -1,13 +1,20 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Channel
+from django.db.models import Q
 
-
-# define view to get all channels
+# define view to get all channels, allows filtering
 @csrf_exempt
 def get_all_channels(request):
-    # get all channels from the database
-    channels = Channel.objects.all()
+    group_id = request.GET.get('group_id',None)
+    # get all channels from the database. If the group_id is not none, get the channels in the group instead
+    # We get all the channel that have a group with the same id as the group_id, and also if the group_id
+    # is in the parent channel. We remove the duplicates. 
+    if group_id:
+        channels = Channel.objects.filter(Q(groups__id=group_id) | Q(parent__groups__id=group_id)).distinct()
+    else:
+        channels = Channel.objects.all()
+
     channel_list = []
     # loop all channels and append a dict with the channel info to the list
     for channel in channels:
@@ -18,6 +25,7 @@ def get_all_channels(request):
             'picture': channel.picture.url if channel.picture else None,
             'subchannels': list(channel.subchannels.values_list('id', flat=True)),
             'contents': list(channel.contents.values_list('id', flat=True)),
+            'groups': list(channel.groups.values_list('name', flat=True)),
         }
         channel_list.append(channel_dict)
     
@@ -43,6 +51,7 @@ def get_single_channel(request, channel_id):
         'picture': channel.picture.url if channel.picture else None,
         'subchannels': list(channel.subchannels.values_list('id', flat=True)),
         'contents': list(channel.contents.values_list('id', flat=True)),
+        'groups': list(channel.groups.values_list('name', flat=True)),
     }
 
     # return the channel dictionary as a JSON response
@@ -70,6 +79,7 @@ def get_subchannels(request, channel_id):
             'language': subchannel.language,
             'picture': subchannel.picture.url if subchannel.picture else None,
             'contents': list(subchannel.contents.values_list('id', flat=True)),
+            'groups': list(channel.groups.values_list('name', flat=True)),
         }
         subchannel_list.append(subchannel_dict)
 
